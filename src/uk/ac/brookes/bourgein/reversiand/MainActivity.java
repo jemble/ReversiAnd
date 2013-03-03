@@ -79,7 +79,7 @@ public class MainActivity extends Activity {
 			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 					long arg3) {
 				
-				moveRow = arg2/8;
+				moveRow = arg2/8; //arg2 is the 1d array pos
 				moveCol = arg2%8;
 				
 				if(curPlayer.isValidMove(moveRow, moveCol)){
@@ -95,11 +95,6 @@ public class MainActivity extends Activity {
 					player1Text.setText(player1.getScoreAsString());
 					player2Text.setText(player2.getScoreAsString());
 				}
-				
-				
-				
-				
-				
 			}
 		});
 		
