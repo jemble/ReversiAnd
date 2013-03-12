@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import android.widget.GridView;
 
@@ -87,13 +88,17 @@ public class MainActivity extends Activity {
 					curPlayer = (curPlayer.getPlayerNum() == 1) ? player2 : player1;
 					player1.calcPlayableMoves(gameBoard, dirsArList);
 					player2.calcPlayableMoves(gameBoard, dirsArList);
-					
+					player1.calcBestMove(gameBoard, dirsArList);
+					player2.calcBestMove(gameBoard, dirsArList);
 					set1Darray();
 					calcScore(player1);
 					calcScore(player2);
+					
 					gridAdapter.notifyDataSetChanged();
 					player1Text.setText(player1.getScoreAsString());
 					player2Text.setText(player2.getScoreAsString());
+					Toast toast1 = Toast.makeText(getApplicationContext(), curPlayer.getBestSquare(), Toast.LENGTH_LONG);
+					toast1.show();
 				}
 			}
 		});
