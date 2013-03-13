@@ -2,6 +2,7 @@ package uk.ac.brookes.bourgein.reversiand;
 
 import java.util.ArrayList;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -41,7 +42,8 @@ public class MainActivity extends Activity {
 	static Player curPlayer;
 	ArrayList<Direction> dirsArList = new ArrayList<Direction>();
 	int moveCol, moveRow;
-
+	private CountDownTimer countTimer;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -49,6 +51,8 @@ public class MainActivity extends Activity {
 		
 		setupGame();
 		
+		  
+		  
 		if (player1.getCanGo() || player2.getCanGo()){
 			gridV.setOnItemClickListener(new OnItemClickListener() {
 				@Override
@@ -139,6 +143,18 @@ public class MainActivity extends Activity {
 		player1Text.setText(player1.getScoreAsString());
 		player2Text.setText(player2.getScoreAsString());
 		player2.setIsCpu(cpu);
+		countTimer = new CountDownTimer(30000, 1000) {
+
+		     public void onTick(long millisUntilFinished) {
+		         
+		     }
+
+		     public void onFinish() {
+		    	 Toast countToast = Toast.makeText(getApplicationContext(), "Time's up!", Toast.LENGTH_LONG);
+		    	 countToast.show();
+		    	 endMove();
+		     }
+		  }.start();
 	}
 
 	public void doMove(int rowToPlay, int colToPlay){
@@ -160,13 +176,14 @@ public class MainActivity extends Activity {
 		calcScore(player2);
 		player1Text.setText(player1.getScoreAsString());
 		player2Text.setText(player2.getScoreAsString());
-		
+		countTimer.start();
 //		Toast toast1 = Toast.makeText(getApplicationContext(), curPlayer.getBestSquare(), Toast.LENGTH_LONG);
 //		toast1.show();
 		
 		if (curPlayer.getIsCpu()){
 			doMove(curPlayer.getBestRow(),curPlayer.getBestCol());
 		}
+		
 	}
 	
 	public int get2dInd(int i) {
