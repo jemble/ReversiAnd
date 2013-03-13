@@ -3,6 +3,12 @@ package uk.ac.brookes.bourgein.reversiand;
 import java.util.ArrayList;
 import android.os.Bundle;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.AlertDialog.Builder;
+import android.app.Dialog;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnClickListener;
+import android.content.Intent;
 import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
@@ -13,13 +19,14 @@ import android.widget.Toast;
 import android.widget.GridView;
 
 public class MainActivity extends Activity {
-	private static int gameBoard[][] = new int[8][8];
-	private int gameBoard1d[] = new int[64];
+	private static final int BACK_BUTTON_PRESS = 1;
+	private static int gameBoard[][];
+	private int gameBoard1d[];
 	private ImageAdapter gridAdapter;
 	private GridView gridV;
 	private TextView player1Text;
 	private TextView player2Text;
-
+	private boolean cpu;
 	static Direction west = new Direction(-1, 0);
 	static Direction east = new Direction(1, 0);
 	static Direction north = new Direction(0, -1);
@@ -29,19 +36,76 @@ public class MainActivity extends Activity {
 	static Direction southWest = new Direction(-1, 1);
 	static Direction northWest = new Direction(-1, -1);
 
-	static Player player1 = new Player(1);
-	static Player player2 = new Player(2);
-
-	static int gameCount = 0;
+	static Player player1;
+	static Player player2;
+	static Player curPlayer;
 	ArrayList<Direction> dirsArList = new ArrayList<Direction>();
 	int moveCol, moveRow;
-	static Player curPlayer = player1;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+		
+		setupGame();
+		
+		if (player1.getCanGo() || player2.getCanGo()){
+			gridV.setOnItemClickListener(new OnItemClickListener() {
+				@Override
+				public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+						long arg3) {
+					
+					moveRow = arg2/8; //arg2 is the 1d array pos
+					moveCol = arg2%8;
+					doMove(moveRow,moveCol);
+				}
+			});
+			
+			set1Darray();
+			gridAdapter.notifyDataSetChanged();
+		}
+		else{
+			Toast toast2 = Toast.makeText(getApplicationContext(), "game over", Toast.LENGTH_LONG);
+			toast2.show();
+		}
+	}
 
+	@Override
+	public Dialog onCreateDialog(int id){
+		switch(id){
+		case BACK_BUTTON_PRESS:
+			Builder builder = new AlertDialog.Builder(this);
+			builder.setMessage("Are you sure you want to quit?");
+			builder.setCancelable(true);
+			builder.setPositiveButton("OK", new OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					MainActivity.this.finish();
+				}
+			});
+			
+			builder.setNegativeButton("Cancel", new OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface dialog, int which) {
+					dialog.cancel();
+				}
+			});
+			AlertDialog dialog = builder.create();
+			dialog.show();
+		}
+		return super.onCreateDialog(id);
+	}
+	
+	@Override
+	public void onBackPressed(){
+		showDialog(BACK_BUTTON_PRESS);
+	}
+	
+	public void setupGame(){
+		gameBoard = new int[8][8];
+		gameBoard1d = new int[64];
 		dirsArList.add(east);
 		dirsArList.add(west);
 		dirsArList.add(north);
@@ -50,17 +114,17 @@ public class MainActivity extends Activity {
 		dirsArList.add(southEast);
 		dirsArList.add(southWest);
 		dirsArList.add(northWest);
-
+		player1 = new Player(1);
+		player2 = new Player(2);
+		curPlayer = player1;
 		gameBoard[4][3] = player1.getPlayerNum();
 		gameBoard[3][4] = player1.getPlayerNum();
 		gameBoard[3][3] = player2.getPlayerNum();
 		gameBoard[4][4] = player2.getPlayerNum();
 
-		player1.setPlayableSquare(4, 3);
-		player1.setPlayableSquare(3, 4);
-		player2.setPlayableSquare(3, 3);
-		player2.setPlayableSquare(4, 4);
-
+		Intent intent = getIntent();
+		cpu = intent.getBooleanExtra("Cpu",false);
+		
 		gridAdapter = new ImageAdapter(this,gameBoard1d);
 		gridV = (GridView) findViewById(R.id.gameGrid);
 		gridV.setAdapter(gridAdapter);
@@ -74,40 +138,37 @@ public class MainActivity extends Activity {
 		calcScore(player2);
 		player1Text.setText(player1.getScoreAsString());
 		player2Text.setText(player2.getScoreAsString());
-		
-		gridV.setOnItemClickListener(new OnItemClickListener() {
-			@Override
-			public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-					long arg3) {
-				
-				moveRow = arg2/8; //arg2 is the 1d array pos
-				moveCol = arg2%8;
-				
-				if(curPlayer.isValidMove(moveRow, moveCol)){
-					flip(moveRow, moveCol, curPlayer.getPlayerNum(), dirsArList);
-					curPlayer = (curPlayer.getPlayerNum() == 1) ? player2 : player1;
-					player1.calcPlayableMoves(gameBoard, dirsArList);
-					player2.calcPlayableMoves(gameBoard, dirsArList);
-					player1.calcBestMove(gameBoard, dirsArList);
-					player2.calcBestMove(gameBoard, dirsArList);
-					set1Darray();
-					calcScore(player1);
-					calcScore(player2);
-					
-					gridAdapter.notifyDataSetChanged();
-					player1Text.setText(player1.getScoreAsString());
-					player2Text.setText(player2.getScoreAsString());
-					Toast toast1 = Toast.makeText(getApplicationContext(), curPlayer.getBestSquare(), Toast.LENGTH_LONG);
-					toast1.show();
-				}
-			}
-		});
-		
-		set1Darray();
-		gridAdapter.notifyDataSetChanged();
-
+		player2.setIsCpu(cpu);
 	}
 
+	public void doMove(int rowToPlay, int colToPlay){
+		if(curPlayer.isValidMove(rowToPlay, colToPlay)){
+			flip(rowToPlay, colToPlay, curPlayer.getPlayerNum(), dirsArList);
+			gridAdapter.notifyDataSetChanged();
+			endMove();								
+		}
+	}
+	
+	public void endMove(){
+		curPlayer = (curPlayer.getPlayerNum() == 1) ? player2 : player1;
+		player1.calcPlayableMoves(gameBoard, dirsArList);
+		player2.calcPlayableMoves(gameBoard, dirsArList);
+		player1.calcBestMove(gameBoard, dirsArList);
+		player2.calcBestMove(gameBoard, dirsArList);
+		set1Darray();
+		calcScore(player1);
+		calcScore(player2);
+		player1Text.setText(player1.getScoreAsString());
+		player2Text.setText(player2.getScoreAsString());
+		
+//		Toast toast1 = Toast.makeText(getApplicationContext(), curPlayer.getBestSquare(), Toast.LENGTH_LONG);
+//		toast1.show();
+		
+		if (curPlayer.getIsCpu()){
+			doMove(curPlayer.getBestRow(),curPlayer.getBestCol());
+		}
+	}
+	
 	public int get2dInd(int i) {
 		return gameBoard[i / 8][i % 8];
 	}

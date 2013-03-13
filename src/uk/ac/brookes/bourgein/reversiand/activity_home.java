@@ -23,21 +23,34 @@ public class activity_home extends Activity {
          twoPlayerButton = (Button)findViewById(R.id.btn_2player);
          
          onePlayerButton.setOnClickListener(new OnClickListener() {
+			
 			@Override
 			public void onClick(View v) {
-				Intent intent = new Intent( getApplicationContext(), MainActivity.class);
-		         startActivity(intent);
+				Intent onePlayerIntent = new Intent(getApplicationContext(),MainActivity.class);
+				onePlayerIntent.putExtra("Cpu", true);
+				startActivity(onePlayerIntent);
 			}
 		});
          
          twoPlayerButton.setOnClickListener(new OnClickListener() {
-			
 			@Override
 			public void onClick(View v) {
-				Intent intentContact = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI); 
-				startActivityForResult(intentContact, PICK_CONTACT);
-				
+				Intent twoPlayerIntent = new Intent( getApplicationContext(), MainActivity.class);
+				twoPlayerIntent.putExtra("Cpu", false);
+		         startActivity(twoPlayerIntent);
 			}
 		});
+         
+         
+         
+//         twoPlayerButton.setOnClickListener(new OnClickListener() {
+//			
+//			@Override
+//			public void onClick(View v) {
+//				Intent intentContact = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI); 
+//				startActivityForResult(intentContact, PICK_CONTACT);
+//				
+//			}
+//		});
     }
 }

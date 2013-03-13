@@ -10,6 +10,8 @@ public class Player {
 	private int score;
 	private int bestRow;
 	private int bestCol;
+	private boolean canGo;
+	private boolean isCpu;
 	
 	public Player(int player){
 		playableSquares = new int[8][8];
@@ -20,8 +22,6 @@ public class Player {
 	public int getPlayerNum(){
 		return playerNum;
 	}
-	
-	
 	
 	public void setScore(int score){
 		this.score = score;
@@ -44,12 +44,32 @@ public class Player {
 		this.bestCol = col; 
 	}
 	
+	public void setIsCpu(boolean isCpu){
+		this.isCpu = isCpu;
+	}
+	
+	public boolean getIsCpu(){
+		return this.isCpu;
+	}
+	
+	public boolean getCanGo(){
+		return this.canGo;
+	}
+	
+	public int getBestRow(){
+		return this.bestRow;
+	}
+	
+	public int getBestCol(){
+		return this.bestCol;
+	}
 	public String getBestSquare(){
 		return "Player "+this.playerNum+" best square is row: "+this.bestRow + " col: "+this.bestCol;
 	}
 	
 	public void calcPlayableMoves(int[][] currentGameBoard, ArrayList<Direction> dirs){
 		resetMoves();
+		int moveCount=0;
 		int otherPlayer = (this.playerNum == 1) ? 2 : 1;
 		for (int row = 0;row<8;row++){
 			for (int col = 0; col<8;col++){
@@ -77,6 +97,7 @@ public class Player {
 									//if we end up on one of our own pieces
 									if (currentGameBoard[(row+(move*dirRow))][(col+(move*dirCol))]==this.playerNum){
 										setSquareAsPlayable(row, col);
+										moveCount++;
 									}
 									move++;
 								}
@@ -85,6 +106,12 @@ public class Player {
 					}
 				}	
 			}
+		}
+		if (moveCount==0){
+			this.canGo = false;
+		}
+		else {
+			this.canGo = true;
 		}
 	}
 	
