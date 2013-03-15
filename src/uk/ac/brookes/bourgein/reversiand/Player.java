@@ -32,7 +32,7 @@ public class Player {
 	}
 	
 	public String getScoreAsString(){
-		return "Player " + playerNum+ ": " + Integer.toString(score);
+		return Integer.toString(score);
 	}
 	
 	public void setPlayableSquare(int row,int col){

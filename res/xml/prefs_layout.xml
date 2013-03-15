@@ -1,5 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+    <EditTextPreference
+        android:key="turnTime"
+        android:summary="How many seconds should each turn take"
+        android:title="Turn time"
+        android:inputType="number"/>
     
+    <Preference android:key="contactPref"
+        android:summary="Pick a player one contact"
+        android:title="Pick Player One"/>
+        
 
 </PreferenceScreen>

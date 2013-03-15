@@ -7,6 +7,7 @@
     <uses-sdk
         android:minSdkVersion="8"
         android:targetSdkVersion="17" />
+    <uses-permission android:name="android.permission.READ_CONTACTS"/>
 
     <application
         android:allowBackup="true"
@@ -23,6 +24,12 @@
         </activity>
         <activity
             android:name="uk.ac.brookes.bourgein.reversiand.MainActivity">
+        </activity>
+        <activity
+            android:name="uk.ac.brookes.bourgein.reversiand.PrefsActivity">
+        </activity>
+         <activity
+            android:name="uk.ac.brookes.bourgein.reversiand.CustomPrefs">
         </activity>
         
     </application>

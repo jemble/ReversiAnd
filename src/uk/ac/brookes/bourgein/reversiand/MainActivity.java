@@ -3,6 +3,8 @@ package uk.ac.brookes.bourgein.reversiand;
 import java.util.ArrayList;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.preference.PreferenceManager;
+import android.provider.ContactsContract;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.AlertDialog.Builder;
@@ -10,7 +12,11 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.view.KeyEvent;
 import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
@@ -27,6 +33,7 @@ public class MainActivity extends Activity {
 	private GridView gridV;
 	private TextView player1Text;
 	private TextView player2Text;
+	private TextView timerText;
 	private boolean cpu;
 	static Direction west = new Direction(-1, 0);
 	static Direction east = new Direction(1, 0);
@@ -43,6 +50,9 @@ public class MainActivity extends Activity {
 	ArrayList<Direction> dirsArList = new ArrayList<Direction>();
 	int moveCol, moveRow;
 	private CountDownTimer countTimer;
+	private int turnTime;
+	
+	SharedPreferences settings;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -50,9 +60,7 @@ public class MainActivity extends Activity {
 		setContentView(R.layout.activity_main);
 		
 		setupGame();
-		
-		  
-		  
+		 
 		if (player1.getCanGo() || player2.getCanGo()){
 			gridV.setOnItemClickListener(new OnItemClickListener() {
 				@Override
@@ -86,6 +94,7 @@ public class MainActivity extends Activity {
 				@Override
 				public void onClick(DialogInterface dialog, int which) {
 					MainActivity.this.finish();
+					countTimer.cancel();
 				}
 			});
 			
@@ -107,6 +116,16 @@ public class MainActivity extends Activity {
 		showDialog(BACK_BUTTON_PRESS);
 	}
 	
+	public boolean onKey(View v,int keyCode, KeyEvent event){
+		switch(keyCode){
+		case KeyEvent.KEYCODE_DPAD_RIGHT:
+			Toast keyRightToast = Toast.makeText(getApplicationContext(), "right key", Toast.LENGTH_SHORT);
+			keyRightToast.show();
+			return true;
+		}
+		return false;
+	}
+	
 	public void setupGame(){
 		gameBoard = new int[8][8];
 		gameBoard1d = new int[64];
@@ -118,8 +137,27 @@ public class MainActivity extends Activity {
 		dirsArList.add(southEast);
 		dirsArList.add(southWest);
 		dirsArList.add(northWest);
-		player1 = new Player(1);
 		player2 = new Player(2);
+		settings = PreferenceManager.getDefaultSharedPreferences(this);
+		turnTime = Integer.parseInt(settings.getString("turnTime", "30"));
+		int playerOneNum = Integer.parseInt(settings.getString("playerOneId", "1"));
+		
+		Cursor cursor = getContentResolver().query(
+				ContactsContract.Contacts.CONTENT_URI,
+				null,
+				ContactsContract.Contacts._ID+"="+playerOneNum,
+				null,
+				null);
+        int nameIdx= cursor.getColumnIndexOrThrow(ContactsContract.Contacts.DISPLAY_NAME);
+        String playerOneName="Player 1";
+        if (cursor.moveToFirst()){
+        	playerOneName = cursor.getString(nameIdx); 
+        }
+        
+        Toast nameToast = Toast.makeText(getApplicationContext(), playerOneName, Toast.LENGTH_LONG);
+        nameToast.show();
+		
+		player1 = new Player(1);
 		curPlayer = player1;
 		gameBoard[4][3] = player1.getPlayerNum();
 		gameBoard[3][4] = player1.getPlayerNum();
@@ -128,6 +166,7 @@ public class MainActivity extends Activity {
 
 		Intent intent = getIntent();
 		cpu = intent.getBooleanExtra("Cpu",false);
+		
 		
 		gridAdapter = new ImageAdapter(this,gameBoard1d);
 		gridV = (GridView) findViewById(R.id.gameGrid);
@@ -138,15 +177,26 @@ public class MainActivity extends Activity {
 		
 		player1Text = (TextView)findViewById(R.id.player1Text);
 		player2Text = (TextView)findViewById(R.id.player2Text);
+		timerText = (TextView)findViewById(R.id.timerText);
+		
 		calcScore(player1);
 		calcScore(player2);
 		player1Text.setText(player1.getScoreAsString());
 		player2Text.setText(player2.getScoreAsString());
+		
 		player2.setIsCpu(cpu);
-		countTimer = new CountDownTimer(30000, 1000) {
+		if (curPlayer == player1){
+			player2Text.setBackgroundColor(0);
+			player1Text.setBackgroundColor(getResources().getColor(R.color.background));
+		}
+		else{
+			player1Text.setBackgroundColor(0);
+			player2Text.setBackgroundColor(getResources().getColor(R.color.background));
+		}
+		countTimer = new CountDownTimer((turnTime*1000), 1000) {
 
 		     public void onTick(long millisUntilFinished) {
-		         
+		         timerText.setText(Long.toString(millisUntilFinished/1000));
 		     }
 
 		     public void onFinish() {
@@ -176,6 +226,14 @@ public class MainActivity extends Activity {
 		calcScore(player2);
 		player1Text.setText(player1.getScoreAsString());
 		player2Text.setText(player2.getScoreAsString());
+		if (curPlayer == player1){
+			player2Text.setBackgroundColor(0);
+			player1Text.setBackgroundColor(getResources().getColor(R.color.background));
+		}
+		else{
+			player1Text.setBackgroundColor(0);
+			player2Text.setBackgroundColor(getResources().getColor(R.color.background));
+		}
 		countTimer.start();
 //		Toast toast1 = Toast.makeText(getApplicationContext(), curPlayer.getBestSquare(), Toast.LENGTH_LONG);
 //		toast1.show();
@@ -275,6 +333,25 @@ public class MainActivity extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.activity_main, menu);
 		return true;
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item){
+		switch (item.getItemId()) {
+		case R.id.menu_settings:
+			Toast setToast = Toast.makeText(getApplicationContext(), "setting", Toast.LENGTH_SHORT);
+			setToast.show();
+			break;
+		case R.id.about:
+			Toast aboutToast = Toast.makeText(getApplicationContext(), "about", Toast.LENGTH_SHORT);
+			aboutToast.show();
+			break;
+		case R.id.help:
+			Toast helpToast = Toast.makeText(getApplicationContext(), "help", Toast.LENGTH_SHORT);
+			helpToast.show();
+			break;
+		}
+		return super.onOptionsItemSelected(item);
 	}
 
 }

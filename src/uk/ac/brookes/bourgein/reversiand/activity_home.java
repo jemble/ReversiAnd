@@ -13,6 +13,7 @@ public class activity_home extends Activity {
 	public static final int PICK_CONTACT = 0;
 	private Button onePlayerButton;
 	private Button twoPlayerButton;
+	private Button settingsButton;
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -21,6 +22,7 @@ public class activity_home extends Activity {
          
          onePlayerButton = (Button)findViewById(R.id.btn_1player);
          twoPlayerButton = (Button)findViewById(R.id.btn_2player);
+         settingsButton = (Button)findViewById(R.id.btn_settings);
          
          onePlayerButton.setOnClickListener(new OnClickListener() {
 			
@@ -40,6 +42,17 @@ public class activity_home extends Activity {
 		         startActivity(twoPlayerIntent);
 			}
 		});
+         
+         settingsButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent settingsIntent = new Intent(getApplicationContext(),PrefsActivity.class);
+				startActivity(settingsIntent);
+				
+			}
+		});
+         
          
          
          
