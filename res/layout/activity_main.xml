@@ -3,25 +3,65 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MainActivity" 
-    android:background="@color/background">
+    android:background="@drawable/gradients">
 	
+	<ImageView
+	    android:id="@+id/imgPlayerOne"
+	    android:layout_width="wrap_content"
+	    android:layout_height="40dp"
+	    android:layout_alignParentTop="true"
+	    />
 	<TextView
+	    android:id="@+id/playerOneName"
+	    android:layout_height="40dp"
+	    android:layout_width="wrap_content"
+	    android:layout_toRightOf="@+id/imgPlayerOne"
+	    android:gravity="left|center_vertical"
+	    android:textSize="20sp"
+	    />
+	      
+	    <TextView
         android:id="@+id/player1Text"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
+        android:layout_height="40dp"
+        android:layout_toRightOf="@+id/playerOneName"
+        android:layout_alignParentRight="true"
+        android:gravity="right|center_vertical"
+        android:textSize="20sp"
         tools:context=".MainActivity"
-        />
-
-    <TextView
+        />   
+    
+    <ImageView
+	    android:id="@+id/imgPlayerTwo"
+	    android:layout_width="wrap_content"
+	    android:layout_height="40dp"
+	    android:layout_below="@+id/imgPlayerOne"
+	    android:layout_alignParentLeft="true"
+	    />
+    
+     <TextView
+	    android:id="@+id/playerTwoName"
+	    android:layout_height="40dp"
+	    android:layout_width="wrap_content"
+	    android:layout_toRightOf="@+id/imgPlayerTwo"
+	    android:layout_below="@id/playerOneName"
+	    android:gravity="left|center_vertical"
+	    android:textSize="20sp"
+	    />
+     
+     <TextView
         android:id="@+id/player2Text"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_above="@+id/gameGrid"
+        android:layout_height="40dp"  
         android:layout_alignParentRight="true"
+        android:layout_toRightOf="@+id/playerTwoName"
+        android:layout_above="@+id/gameGrid"
+        android:gravity="right|center_vertical"
+        android:textSize="20sp"
         tools:context=".MainActivity"
         />
+     
+    
     <GridView
         android:id="@+id/gameGrid"
         android:background="@color/background"
@@ -29,14 +69,16 @@
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
         android:layout_centerVertical="true"
+        android:layout_below="@id/imgPlayerTwo"
         android:padding="0dp"
         android:numColumns="8">
     </GridView>
+    
     <TextView
         android:id="@+id/timerText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/gameGrid"
+        android:layout_below="@id/gameGrid"
         android:gravity="center"
         />
 

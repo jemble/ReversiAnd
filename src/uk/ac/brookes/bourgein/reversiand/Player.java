@@ -7,6 +7,8 @@ import java.util.ArrayList;
 public class Player {
 	private int[][] playableSquares;
 	private int playerNum;
+	private String playerName;
+	private String playerUriString;
 	private int score;
 	private int bestRow;
 	private int bestCol;
@@ -63,6 +65,23 @@ public class Player {
 	public int getBestCol(){
 		return this.bestCol;
 	}
+	
+	public void setPlayerName(String name){
+		this.playerName = name;
+	}
+	
+	public String getPlayerName(){
+		return this.playerName;
+	}
+	
+	public void setPlayerUriString(String uri){
+		this.playerUriString = uri;
+	}
+	
+	public String getPlayerUriString(){
+		return this.playerUriString;
+	}
+	
 	public String getBestSquare(){
 		return "Player "+this.playerNum+" best square is row: "+this.bestRow + " col: "+this.bestCol;
 	}

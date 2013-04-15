@@ -9,6 +9,19 @@
     <Preference android:key="contactPref"
         android:summary="Pick a player one contact"
         android:title="Pick Player One"/>
+    
+    <Preference android:key="contactPrefTwo"
+        android:summary="Pick a player two contact"
+        android:title="Pick Player Two"/>
         
+    <CheckBoxPreference
+        android:key="timedGame"
+        android:summary="Normal or Timed Mode"
+        android:title="Game type"/>
+    
+    <CheckBoxPreference
+        android:key="soundOn"
+        android:summary="Sound"
+        android:title="Sound On or Off"/>
 
 </PreferenceScreen>

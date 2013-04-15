@@ -17,36 +17,48 @@ public final class R {
         public static final int black=0x7f020000;
         public static final int blank=0x7f020001;
         public static final int felt=0x7f020002;
-        public static final int ic_launcher=0x7f020003;
-        public static final int white=0x7f020004;
+        public static final int gradients=0x7f020003;
+        public static final int ic_launcher=0x7f020004;
+        public static final int stub=0x7f020005;
+        public static final int white=0x7f020006;
     }
     public static final class id {
-        public static final int about=0x7f0a0014;
-        public static final int btn_1player=0x7f0a000e;
-        public static final int btn_2player=0x7f0a000f;
-        public static final int btn_highscore=0x7f0a0011;
-        public static final int btn_settings=0x7f0a0010;
-        public static final int button1=0x7f0a0008;
-        public static final int button2=0x7f0a000c;
-        public static final int editText1=0x7f0a000d;
-        public static final int editText2=0x7f0a0007;
-        public static final int editText3=0x7f0a000b;
-        public static final int gameGrid=0x7f0a0002;
-        public static final int help=0x7f0a0013;
-        public static final int imageView1=0x7f0a0006;
-        public static final int imageView2=0x7f0a000a;
-        public static final int menu_settings=0x7f0a0012;
-        public static final int player1Text=0x7f0a0000;
-        public static final int player2Text=0x7f0a0001;
-        public static final int textView1=0x7f0a0004;
-        public static final int textView2=0x7f0a0005;
-        public static final int textView3=0x7f0a0009;
-        public static final int timerText=0x7f0a0003;
+        public static final int about=0x7f0a001c;
+        public static final int btn_1player=0x7f0a0016;
+        public static final int btn_2player=0x7f0a0017;
+        public static final int btn_highscore=0x7f0a0019;
+        public static final int btn_settings=0x7f0a0018;
+        public static final int button1=0x7f0a000c;
+        public static final int button2=0x7f0a0010;
+        public static final int editText1=0x7f0a0011;
+        public static final int editText2=0x7f0a000b;
+        public static final int editText3=0x7f0a000f;
+        public static final int gameGrid=0x7f0a0006;
+        public static final int help=0x7f0a001b;
+        public static final int hghscore_list=0x7f0a0015;
+        public static final int hs_image=0x7f0a0012;
+        public static final int hs_name=0x7f0a0013;
+        public static final int hs_score=0x7f0a0014;
+        public static final int imageView1=0x7f0a000a;
+        public static final int imageView2=0x7f0a000e;
+        public static final int imgPlayerOne=0x7f0a0000;
+        public static final int imgPlayerTwo=0x7f0a0003;
+        public static final int menu_settings=0x7f0a001a;
+        public static final int player1Text=0x7f0a0002;
+        public static final int player2Text=0x7f0a0005;
+        public static final int playerOneName=0x7f0a0001;
+        public static final int playerTwoName=0x7f0a0004;
+        public static final int textView1=0x7f0a0008;
+        public static final int textView2=0x7f0a0009;
+        public static final int textView3=0x7f0a000d;
+        public static final int timerText=0x7f0a0007;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
         public static final int custom_prefs=0x7f030001;
-        public static final int home_screen=0x7f030002;
+        public static final int highscore_item=0x7f030002;
+        public static final int highscore_layout=0x7f030003;
+        public static final int home_screen=0x7f030004;
     }
     public static final class menu {
         public static final int activity_main=0x7f090000;

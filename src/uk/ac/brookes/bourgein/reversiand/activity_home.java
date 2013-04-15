@@ -3,7 +3,6 @@ package uk.ac.brookes.bourgein.reversiand;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.ContactsContract;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -14,6 +13,7 @@ public class activity_home extends Activity {
 	private Button onePlayerButton;
 	private Button twoPlayerButton;
 	private Button settingsButton;
+	private Button highscoreButton;
 	
 	@Override
     public void onCreate(Bundle savedInstanceState) {
@@ -23,6 +23,7 @@ public class activity_home extends Activity {
          onePlayerButton = (Button)findViewById(R.id.btn_1player);
          twoPlayerButton = (Button)findViewById(R.id.btn_2player);
          settingsButton = (Button)findViewById(R.id.btn_settings);
+         highscoreButton = (Button)findViewById(R.id.btn_highscore);
          
          onePlayerButton.setOnClickListener(new OnClickListener() {
 			
@@ -53,17 +54,13 @@ public class activity_home extends Activity {
 			}
 		});
          
-         
-         
-         
-//         twoPlayerButton.setOnClickListener(new OnClickListener() {
-//			
-//			@Override
-//			public void onClick(View v) {
-//				Intent intentContact = new Intent(Intent.ACTION_PICK, ContactsContract.Contacts.CONTENT_URI); 
-//				startActivityForResult(intentContact, PICK_CONTACT);
-//				
-//			}
-//		});
+         highscoreButton.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View v) {
+				Intent highscoreIntent = new Intent(getApplicationContext(),HighscoreActivity.class);
+				startActivity(highscoreIntent);				
+			}
+		});
     }
 }
