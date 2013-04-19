@@ -14,6 +14,7 @@ import android.preference.Preference.OnPreferenceClickListener;
 import android.preference.PreferenceActivity;
 import android.preference.PreferenceManager;
 import android.provider.ContactsContract;
+import android.widget.Toast;
 
 public class PrefsActivity extends PreferenceActivity {
 	protected static final int PLAYER_ONE_PICK = 1;
@@ -44,8 +45,7 @@ public class PrefsActivity extends PreferenceActivity {
 		            startActivityForResult(i, PLAYER_TWO_PICK);
 		            return true;
 		        }
-		    });
-		    
+		    });		    
 		}
 	
 	@Override
@@ -98,6 +98,8 @@ public class PrefsActivity extends PreferenceActivity {
 		    
 		    editor.putString(player+"Name", playerName);
 		    editor.putString(player+"Pic",pic.toString());
+		    Toast endToast = Toast.makeText(getApplicationContext(), pic.toString(), Toast.LENGTH_SHORT);
+			endToast.show();
 		    editor.commit();
 		}
 	

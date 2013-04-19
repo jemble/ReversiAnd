@@ -11,7 +11,7 @@ import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.Toast;
 
-public class HighscoreActivity extends Activity {
+public class HighscoreActivity extends BaseActivity {
 	private ArrayList<String> names = new ArrayList<String>();
 	private ArrayList<Integer> scores = new ArrayList<Integer>();
 	private ArrayList<String> uris = new ArrayList<String>();
@@ -69,22 +69,5 @@ public class HighscoreActivity extends Activity {
 			cr.insert(HighscoreProvider.CONTENT_URI, values);
 		}
 	}
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item){
-		switch (item.getItemId()) {
-		case R.id.menu_settings:
-			Toast setToast = Toast.makeText(getApplicationContext(), "setting", Toast.LENGTH_SHORT);
-			setToast.show();
-			break;
-		case R.id.about:
-			Toast aboutToast = Toast.makeText(getApplicationContext(), "about", Toast.LENGTH_SHORT);
-			aboutToast.show();
-			break;
-		case R.id.help:
-			Toast helpToast = Toast.makeText(getApplicationContext(), "help", Toast.LENGTH_SHORT);
-			helpToast.show();
-			break;
-		}
-		return super.onOptionsItemSelected(item);
-	}
+	
 }

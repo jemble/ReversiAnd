@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/RelativeLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/playerOneTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentTop="true"
+        android:gravity="center_horizontal"
+        android:textSize="24sp"
+        android:text="@string/playerSelectPlayerOneTitle" />
+
+    <ImageView
+        android:id="@+id/playerOneImgVw"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/playerOneTitle"
+        android:src="@drawable/stub" />
+
+    <TextView
+        android:id="@+id/playerOneName"
+        android:layout_width="wrap_content"
+        android:textSize="22sp"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:layout_alignBottom="@+id/playerOneImgVw"
+        android:layout_toRightOf="@+id/playerOneImgVw"/>
+
+    <Button
+        android:id="@+id/playerOneEditDialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/playerOneSelectContact"
+        android:layout_alignBottom="@+id/playerOneSelectContact"
+        android:layout_toLeftOf="@+id/playerOneSelectContact"
+        android:text="@string/playerEditText" />
+    
+    <Button
+        android:id="@+id/playerOneSelectContact"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/playerOneName"
+        android:text="@string/playerSelectSelContact" />
+    
+    <TextView
+        android:id="@+id/playerTwoTitle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/playerOneSelectContact"
+        android:text="@string/playerSelectPlayerTwoTitle" />
+    
+    <ImageView
+        android:id="@+id/playerTwoImgVw"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/playerTwoTitle"
+        android:src="@drawable/stub" />
+
+    <TextView
+        android:id="@+id/playerTwoName"
+        android:layout_width="wrap_content"
+        android:textSize="22sp"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:layout_alignBottom="@+id/playerTwoImgVw"
+        android:layout_toRightOf="@+id/playerTwoImgVw"/>
+
+    <Button
+        android:id="@+id/playerTwoEditDialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/playerTwoSelectContact"
+        android:layout_alignBottom="@+id/playerTwoSelectContact"
+        android:layout_toLeftOf="@+id/playerTwoSelectContact"
+        android:text="@string/playerEditText" />
+    
+    <Button
+        android:id="@+id/playerTwoSelectContact"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/playerTwoName"
+        android:text="@string/playerSelectSelContact" />
+
+    <Button
+        android:id="@+id/playButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/playerTwoSelectContact"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="31dp"
+        android:text="@string/playerSelectPlay" />
+
+    
+
+</RelativeLayout>

@@ -39,6 +39,10 @@
             android:name="uk.ac.brookes.bourgein.reversiand.CustomPrefs"
             android:screenOrientation="portrait">
         </activity>
+         <activity
+            android:name="uk.ac.brookes.bourgein.reversiand.PlayerSelectActivity"
+            android:screenOrientation="portrait">
+        </activity>
        	<provider android:name="HighscoreProvider"    
             android:authorities="uk.ac.brookes.bourgein.highscores"></provider>
     </application>

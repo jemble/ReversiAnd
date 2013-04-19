@@ -3,9 +3,20 @@
 
     <string name="app_name">ReversiAnd</string>
     <string name="menu_settings">Settings</string>
+    <string name="menu_home">Home</string>
     <string name="onePlayerGame">1 player game</string>
     <string name="twoPlayerGame">2 player game</string>
     <string name="settings">Settings</string>
     <string name="highscores">Highscores</string>
+    <string name="playerSelectPlayerOneTitle">Player One</string>
+    <string name="playerSelectPlayerTwoTitle">Player Two</string>
+    <string name="playerSelectSelContact">Select Contact</string>
+    <string name="playerSelectPlay">Play</string>
+    <string name="playerEditText">Enter Name</string>
+    <string name="prefsTileTitle">Choose Tile:</string>
+    <string name="prefsTimedTitle">Timed Game:</string>
+    <string name="prefsSoundTitle">Sound On:</string>
+    <string name="prefsSecondsTitle">Seconds per turn:</string>
+    <string name="save">Save</string>
 
 </resources>

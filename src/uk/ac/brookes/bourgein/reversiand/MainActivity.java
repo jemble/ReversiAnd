@@ -1,5 +1,7 @@
 	package uk.ac.brookes.bourgein.reversiand;
 
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 import android.app.Activity;
@@ -13,12 +15,17 @@ import android.content.DialogInterface.OnClickListener;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.preference.PreferenceManager;
+import android.provider.ContactsContract.Contacts;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -30,9 +37,12 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MainActivity extends Activity {
+public class MainActivity extends BaseActivity {
 	private static final int BACK_BUTTON_PRESS = 1;
 	private static final int GAME_END = 2;
+	private static final int QUIT_TO_SETTINGS = 3;
+	private static final int QUIT_TO_HIGHSCORE = 4;
+	private static final int COMP_DELAY = 1500;
 	private static int gameBoard[][];
 	private int gameBoard1d[];
 	private ImageAdapter gridAdapter;
@@ -45,6 +55,8 @@ public class MainActivity extends Activity {
 	private TextView playerTwoNameTxt;
 	private TextView timerText;
 	private boolean cpu;
+	private boolean isTimed;
+	private boolean soundOn;
 	private String playerOneName;
 	private String pOneUriString;
 	private String playerTwoName;
@@ -84,9 +96,11 @@ public class MainActivity extends Activity {
 				public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
 						long arg3) {
 					
-					moveRow = arg2/8; //arg2 is the 1d array pos
-					moveCol = arg2%8;
-					doMove(moveRow,moveCol);	
+					if (!curPlayer.getIsCpu()){
+						moveRow = arg2/8; //arg2 is the 1d array pos
+						moveCol = arg2%8;
+						doMove(moveRow,moveCol);
+					}
 				}
 			});
 			
@@ -109,9 +123,13 @@ public class MainActivity extends Activity {
 			builder.setPositiveButton("OK", new OnClickListener() {
 				
 				@Override
-				public void onClick(DialogInterface dialog, int which) {
+				public void onClick(DialogInterface dialog, int which) {					
+					if (isTimed){
+						countTimer.cancel();
+					}
+					//this is needed to make sure we go back to the home screen
+					MainActivity.this.setResult(PlayerSelectActivity.MAIN_ACTIVITY_QUIT);
 					MainActivity.this.finish();
-					countTimer.cancel();
 				}
 			});
 			
@@ -123,7 +141,59 @@ public class MainActivity extends Activity {
 				}
 			});
 			return builder.create();
-			//dialog.show();
+			
+		case QUIT_TO_SETTINGS:
+			Builder settingsBuilder = new AlertDialog.Builder(this);
+			settingsBuilder.setMessage("Are you sure you want to quit to go to Settings?");
+			settingsBuilder.setCancelable(true);
+			settingsBuilder.setPositiveButton("OK", new OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface settingsDialog, int which) {					
+					if (isTimed){
+						countTimer.cancel();
+					}
+					Intent settingsIntent = new Intent(getApplicationContext(),CustomPrefs.class);
+					startActivity(settingsIntent);
+					MainActivity.this.finish();
+				}
+			});
+			
+			settingsBuilder.setNegativeButton("Cancel", new OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface settingsDialog, int which) {
+					settingsDialog.cancel();
+				}
+			});
+			return settingsBuilder.create();
+			
+		case QUIT_TO_HIGHSCORE:
+			Builder highscoreBuilder = new AlertDialog.Builder(this);
+			highscoreBuilder.setMessage("Are you sure you want to quit to go to Highscores?");
+			highscoreBuilder.setCancelable(true);
+			highscoreBuilder.setPositiveButton("OK", new OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface highscoreDialog, int which) {					
+					if (isTimed){
+						countTimer.cancel();
+					}
+					Intent highscoreIntent = new Intent(getApplicationContext(),HighscoreActivity.class);
+					startActivity(highscoreIntent);
+					MainActivity.this.finish();
+				}
+			});
+			
+			highscoreBuilder.setNegativeButton("Cancel", new OnClickListener() {
+				
+				@Override
+				public void onClick(DialogInterface highscoreDialog, int which) {
+					highscoreDialog.cancel();
+				}
+			});
+			return highscoreBuilder.create();
+			
 		case GAME_END:
 			Builder restartBuilder = new AlertDialog.Builder(this);
 			restartBuilder.setMessage("Start a new Game?");
@@ -132,7 +202,9 @@ public class MainActivity extends Activity {
 				
 				@Override
 				public void onClick(DialogInterface restartDialog, int which) {
-					countTimer.cancel();
+					if (isTimed){
+						countTimer.cancel();
+					}
 					MainActivity.this.setupGame();
 				}
 			});
@@ -141,8 +213,12 @@ public class MainActivity extends Activity {
 				
 				@Override
 				public void onClick(DialogInterface restartDialog, int which) {
+					if (isTimed){
+						countTimer.cancel();
+					}
+					MainActivity.this.setResult(PlayerSelectActivity.MAIN_ACTIVITY_QUIT);
 					MainActivity.this.finish();
-					countTimer.cancel();
+					
 				}
 			});
 			return restartBuilder.create();
@@ -154,16 +230,6 @@ public class MainActivity extends Activity {
 	@Override
 	public void onBackPressed(){
 		showDialog(BACK_BUTTON_PRESS);
-	}
-	
-	public boolean onKey(View v,int keyCode, KeyEvent event){
-		switch(keyCode){
-		case KeyEvent.KEYCODE_DPAD_RIGHT:
-			Toast keyRightToast = Toast.makeText(getApplicationContext(), "right key", Toast.LENGTH_SHORT);
-			keyRightToast.show();
-			return true;
-		}
-		return false;
 	}
 	
 	/**
@@ -184,35 +250,11 @@ public class MainActivity extends Activity {
 		player1 = new Player(1);
 		
 		imgViewOne = (ImageView)findViewById(R.id.imgPlayerOne);
+		imgViewTwo = (ImageView)findViewById(R.id.imgPlayerTwo);
 		playerOneNameTxt = (TextView)findViewById(R.id.playerOneName);
 		playerTwoNameTxt = (TextView)findViewById(R.id.playerTwoName);
 		
-		settings = PreferenceManager.getDefaultSharedPreferences(this);
-		turnTime = Integer.parseInt(settings.getString("turnTime", "30"));
-		
-		playerOneName = settings.getString("playerOneName", "Player 1");     
-        pOneUriString = settings.getString("playerOnePic", null);
-        if (pOneUriString != null){
-        	Uri photoOne = Uri.parse(pOneUriString);    
-            imgViewOne.setImageURI(photoOne);
-            player1.setPlayerUriString(pOneUriString);
-        }
-        player1.setPlayerName(playerOneName);
-        
-        playerOneNameTxt.setText(playerOneName);
-        
-        imgViewTwo = (ImageView)findViewById(R.id.imgPlayerTwo);
-        playerTwoName = settings.getString("playerTwoName", "Player 2");
-        pTwoUriString = settings.getString("playerTwoPic",null);
-        
-        if(pTwoUriString != null){
-        	Uri photoTwo = Uri.parse(pTwoUriString);
-            imgViewTwo.setImageURI(photoTwo);
-            player2.setPlayerUriString(pTwoUriString);
-        }
-        player2.setPlayerName(playerTwoName);
-        playerTwoNameTxt.setText(playerTwoName);
-        
+		getSettings();
 		
 		
 		curPlayer = player1;
@@ -224,9 +266,11 @@ public class MainActivity extends Activity {
 		Intent intent = getIntent();
 		cpu = intent.getBooleanExtra("Cpu",false);
 		
-		soundPool = new SoundPool(1,AudioManager.STREAM_MUSIC,100);
-		soundId = soundPool.load(this,R.raw.alarm, 1);
-
+		if (soundOn){
+			soundPool = new SoundPool(1,AudioManager.STREAM_MUSIC,100);
+			soundId = soundPool.load(this,R.raw.alarm, 1);
+		}
+		
 		gridAdapter = new ImageAdapter(this,gameBoard1d);
 		gridV = (GridView) findViewById(R.id.gameGrid);
 		gridV.setAdapter(gridAdapter);
@@ -240,11 +284,21 @@ public class MainActivity extends Activity {
 		player1Text = (TextView)findViewById(R.id.player1Text);
 		player2Text = (TextView)findViewById(R.id.player2Text);
 		timerText = (TextView)findViewById(R.id.timerText);
-		
+		player1.setPlayerName(playerOneName);
+        
+        playerOneNameTxt.setText(playerOneName);
 		calcScore(player1);
 		calcScore(player2);
 		player1Text.setText(player1.getScoreAsString());
 		player2Text.setText(player2.getScoreAsString());
+		
+		if (cpu){
+			playerTwoName = "CPU";
+			imgViewTwo.setImageResource(R.drawable.stub);
+		}
+		
+		player2.setPlayerName(playerTwoName);
+        playerTwoNameTxt.setText(playerTwoName);
 		
 		player2.setIsCpu(cpu);
 		
@@ -257,12 +311,16 @@ public class MainActivity extends Activity {
 			playerTwoNameTxt.setBackgroundColor(getResources().getColor(R.color.background));
 		}
 		lowestScore = getLowestHighscore();
-		countTimer = new CountDownTimer((turnTime*1000), 1000) {
-
+		
+		if (isTimed){
+			countTimer = new CountDownTimer((turnTime*1000), 1000) {
+			
 		     public void onTick(long millisUntilFinished) {
 		         timerText.setText(Long.toString(millisUntilFinished/1000));
 		         if (millisUntilFinished/1000 == 30){
-		        	 playSound();
+		        	 if(soundOn){
+		        		 playSound();
+		        	 }
 		        	 timerText.setBackgroundColor(getResources().getColor(R.color.background));
 		         }
 		         if (millisUntilFinished/1000 == 5){
@@ -280,10 +338,9 @@ public class MainActivity extends Activity {
 		    	 else {
 		    		 endGame(player1);
 		    	 }
-		    	 
-		    	 
 		     }
 		  }.start();
+		}
 	}
 	
 	/**
@@ -323,13 +380,30 @@ public class MainActivity extends Activity {
 			playerOneNameTxt.setBackgroundColor(0);
 			playerTwoNameTxt.setBackgroundColor(getResources().getColor(R.color.background));
 		}
-		countTimer.start();
+		if (isTimed){
+			timerText.setTextSize(24);
+			countTimer.start();
+		}
 		
 		if (curPlayer.getIsCpu()){
-			doMove(curPlayer.getBestRow(),curPlayer.getBestCol());
+			final Handler mHandler = new Handler();
+			mHandler.postDelayed(rMakeCompMove, COMP_DELAY);
 		}
 		
 	}
+	
+	/**
+	 * Used to delay the computer moves without freezing program
+	 */
+	private final Runnable rMakeCompMove = new Runnable(){
+
+		@Override
+		public void run() {	
+			doMove(curPlayer.getBestRow(),curPlayer.getBestCol());
+		}
+		
+	};
+	
 	
 	public int get2dInd(int i) {
 		return gameBoard[i / 8][i % 8];
@@ -348,7 +422,7 @@ public class MainActivity extends Activity {
 	 * @param winner the winning player
 	 */
 	public void endGame(Player winner){
-		if (winner.getScore() > lowestScore){
+		if (winner.getScore() > lowestScore && !winner.getIsCpu()){
 			updateHighscore(winner.getPlayerName(),winner.getPlayerUriString(),winner.getScore());
 		}
 		Toast endToast = Toast.makeText(getApplicationContext(), winner.getPlayerName()+" wins!", Toast.LENGTH_SHORT);
@@ -437,32 +511,6 @@ public class MainActivity extends Activity {
 			col += dirCol;
 		}
 	}
-
-	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
-		// Inflate the menu; this adds items to the action bar if it is present.
-		getMenuInflater().inflate(R.menu.activity_main, menu);
-		return true;
-	}
-	
-	@Override
-	public boolean onOptionsItemSelected(MenuItem item){
-		switch (item.getItemId()) {
-		case R.id.menu_settings:
-			Toast setToast = Toast.makeText(getApplicationContext(), "setting", Toast.LENGTH_SHORT);
-			setToast.show();
-			break;
-		case R.id.about:
-			Toast aboutToast = Toast.makeText(getApplicationContext(), "about", Toast.LENGTH_SHORT);
-			aboutToast.show();
-			break;
-		case R.id.help:
-			Toast helpToast = Toast.makeText(getApplicationContext(), "help", Toast.LENGTH_SHORT);
-			helpToast.show();
-			break;
-		}
-		return super.onOptionsItemSelected(item);
-	}
 	
 	/**
 	 * plays the 30 second warning sound
@@ -484,10 +532,65 @@ public class MainActivity extends Activity {
 		Cursor c = cr.query(HighscoreProvider.CONTENT_URI, proj, null, null, HighscoreProvider.KEY_SCORE+" DESC");
 		if (c.moveToFirst()){
 			lowScore = c.getInt(0);
-			Toast scoreT = Toast.makeText(getApplicationContext(), Integer.toString(lowScore), Toast.LENGTH_SHORT);
-			scoreT.show();
+//			Toast scoreT = Toast.makeText(getApplicationContext(), Integer.toString(lowScore), Toast.LENGTH_SHORT);
+//			scoreT.show();
 		}
 		return lowScore;
+	}
+	
+	public InputStream openPhoto(String photoUriString) {
+	    
+	     Uri photoUri = Uri.parse(photoUriString);
+	     Cursor cursor = getContentResolver().query(photoUri,
+	          new String[] {Contacts.Photo.PHOTO}, null, null, null);
+	     if (cursor == null) {
+	         return null;
+	     }
+	     try {
+	         if (cursor.moveToFirst()) {
+	             byte[] data = cursor.getBlob(0);
+	             if (data != null) {
+	                 return new ByteArrayInputStream(data);
+	             }
+	         }
+	     } finally {
+	         cursor.close();
+	     }
+	     return null;
+	 }
+	
+	public void setLayout(String uriString, ImageView imgVw){
+		if (uriString != null){
+			InputStream stream  = openPhoto(uriString);
+			if (stream != null){
+				Bitmap bitmap = BitmapFactory.decodeStream(stream);
+				imgVw.setImageBitmap(bitmap);
+			}
+			else {
+				imgVw.setImageResource(R.drawable.stub);
+			}
+		}
+		else {
+			imgVw.setImageResource(R.drawable.stub);
+		}
+	}
+	
+	public void getSettings(){
+		settings = PreferenceManager.getDefaultSharedPreferences(this);
+		turnTime = settings.getInt("seconds", 60);
+		
+		playerOneName = settings.getString("playerOneName", "Player 1");     
+        pOneUriString = settings.getString("playerOnePic", null);
+        setLayout(pOneUriString,imgViewOne);
+        
+        if (!cpu){
+        	playerTwoName = settings.getString("playerTwoName", "Player 2");
+        	pTwoUriString = settings.getString("playerTwoPic",null);
+            setLayout(pTwoUriString,imgViewTwo);
+        }
+        
+        isTimed = settings.getBoolean("timed", false);
+        soundOn = settings.getBoolean("sounds", false);
 	}
 	
 	/**
@@ -498,11 +601,32 @@ public class MainActivity extends Activity {
 	 */
 	public void updateHighscore(String name, String uriString, int score){
 		ContentResolver cr = getContentResolver();
+		
+		//Delete the lowest score
+		//Perhaps change this to use query to get the rowID???
+		cr.delete(HighscoreProvider.CONTENT_URI, HighscoreProvider.KEY_ID + "= (SELECT " + HighscoreProvider.KEY_ID + " FROM highscores ORDER BY " + HighscoreProvider.KEY_SCORE + " ASC LIMIT 1)", null);
+		
 		ContentValues values = new ContentValues();
 		values.put(HighscoreProvider.KEY_NAME, name);
 		values.put(HighscoreProvider.KEY_PICURI, uriString);
 		values.put(HighscoreProvider.KEY_SCORE, score);
 		cr.insert(HighscoreProvider.CONTENT_URI, values);
+	}
+	
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item){
+		switch (item.getItemId()) {
+		case R.id.home:
+			showDialog(GAME_END);
+			return true;
+		case R.id.settings:
+			showDialog(QUIT_TO_SETTINGS);
+			return true;
+		case R.id.highscores:
+			showDialog(QUIT_TO_HIGHSCORE);
+		default:
+			return super.onOptionsItemSelected(item);
+		}
 	}
 
 }

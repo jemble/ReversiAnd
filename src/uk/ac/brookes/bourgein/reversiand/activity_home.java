@@ -29,7 +29,7 @@ public class activity_home extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				Intent onePlayerIntent = new Intent(getApplicationContext(),MainActivity.class);
+				Intent onePlayerIntent = new Intent(getApplicationContext(),PlayerSelectActivity.class);
 				onePlayerIntent.putExtra("Cpu", true);
 				startActivity(onePlayerIntent);
 			}
@@ -38,9 +38,9 @@ public class activity_home extends Activity {
          twoPlayerButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				Intent twoPlayerIntent = new Intent( getApplicationContext(), MainActivity.class);
+				Intent twoPlayerIntent = new Intent( getApplicationContext(), PlayerSelectActivity.class);
 				twoPlayerIntent.putExtra("Cpu", false);
-		         startActivity(twoPlayerIntent);
+		        startActivity(twoPlayerIntent);
 			}
 		});
          
@@ -48,7 +48,7 @@ public class activity_home extends Activity {
 			
 			@Override
 			public void onClick(View v) {
-				Intent settingsIntent = new Intent(getApplicationContext(),PrefsActivity.class);
+				Intent settingsIntent = new Intent(getApplicationContext(),CustomPrefs.class);
 				startActivity(settingsIntent);
 				
 			}

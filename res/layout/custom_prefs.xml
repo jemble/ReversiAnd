@@ -4,90 +4,102 @@
     android:layout_height="match_parent">
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/tileSelectTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="64dp"
+        android:gravity="center_vertical"
+        android:layout_alignParentLeft="true"
+        android:layout_marginBottom="24dp"
+        android:text="@string/prefsTileTitle"
+        android:textSize="24sp" />
+
+    <ImageButton
+        android:id="@+id/redYellowImgBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:text="TextView" />
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="15dp"
+        android:background="@null"
+        android:src="@drawable/red_yellow_unselect" />
+
+    <ImageButton
+        android:id="@+id/blackWhiteImgBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:background="@null"
+        android:layout_marginRight="15dp"
+        android:layout_marginLeft="15dp"
+        android:layout_toLeftOf="@+id/redYellowImgBtn"
+        android:src="@drawable/black_white_unselect" />
 
     <TextView
-        android:id="@+id/textView2"
+        android:id="@+id/timedTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/textView1"
-        android:layout_marginTop="14dp"
-        android:text="TextView" />
+        android:layout_below="@+id/blackWhiteImgBtn"
+        android:textSize="24sp"
+        android:layout_marginTop="40dp"
+        android:text="@string/prefsTimedTitle" />
 
-    <ImageView
-        android:id="@+id/imageView1"
+    <CheckBox
+        android:id="@+id/timedCheck"
+        android:layout_width="wrap_content"
+        android:layout_height="24sp"
+        android:layout_alignBaseline="@+id/timedTitle"
+        android:layout_alignBottom="@+id/timedTitle"
+        android:layout_alignRight="@+id/redYellowImgBtn"
+        android:text="" />
+
+    <TextView
+        android:id="@+id/soundTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textSize="24sp"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/textView2"
-        android:src="@drawable/white" />
+        android:layout_below="@+id/timedCheck"
+        android:layout_marginTop="40dp"
+        android:text="@string/prefsSoundTitle" />
+    
+    <CheckBox
+        android:id="@+id/soundCheck"
+        android:layout_width="wrap_content"
+        android:layout_height="24sp"
+        android:layout_alignBaseline="@+id/soundTitle"
+        android:layout_alignBottom="@+id/soundTitle"
+        android:layout_alignRight="@+id/redYellowImgBtn"
+        android:text="" />
+    
+    <TextView
+        android:id="@+id/timeTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="24sp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/soundCheck"
+        android:layout_marginTop="40dp"
+        android:text="@string/prefsSecondsTitle" />
 
     <EditText
-        android:id="@+id/editText2"
-        android:layout_width="wrap_content"
+        android:id="@+id/secondsEditText"
+        android:layout_width="80dp"
+        android:maxLength="3"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/imageView1"
-        android:layout_toRightOf="@+id/imageView1"
-        android:ems="10" >
-
-        <requestFocus />
+        android:layout_alignBottom="@+id/timeTitle"
+        android:layout_alignRight="@+id/redYellowImgBtn"
+        android:ems="10"
+        android:inputType="number" >
     </EditText>
 
     <Button
-        android:id="@+id/button1"
-        style="?android:attr/buttonStyleSmall"
+        android:id="@+id/prefsSaveBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignTop="@+id/imageView1"
-        android:text="Button" />
-
-    <TextView
-        android:id="@+id/textView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/button1"
-        android:text="TextView" />
-
-    <ImageView
-        android:id="@+id/imageView2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/textView3"
-        android:src="@drawable/black" />
-
-    <EditText
-        android:id="@+id/editText3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/editText2"
-        android:layout_alignTop="@+id/imageView2"
-        android:ems="10" />
-
-    <Button
-        android:id="@+id/button2"
-        style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_alignTop="@+id/editText3"
-        android:text="Button" />
-
-    <EditText
-        android:id="@+id/editText1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_below="@+id/textView1"
-        android:ems="10"
-        android:inputType="number" />
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="50dp"
+        android:text="@string/save" />
 
 </RelativeLayout>
