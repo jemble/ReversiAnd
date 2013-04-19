@@ -16,7 +16,7 @@
         android:theme="@style/AppTheme" android:debuggable="true">
         <activity 
             android:name="activity_home"
-            android:label="@string/app_name"
+            android:label="@string/home_title"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -25,11 +25,13 @@
         </activity>
         <activity
             android:name="uk.ac.brookes.bourgein.reversiand.MainActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:label="@string/gameScreenTitle">
         </activity>
          <activity
             android:name="uk.ac.brookes.bourgein.reversiand.HighscoreActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:label="@string/highscoreTitle">
         </activity>
         <activity
             android:name="uk.ac.brookes.bourgein.reversiand.PrefsActivity"
@@ -37,11 +39,13 @@
         </activity>
          <activity
             android:name="uk.ac.brookes.bourgein.reversiand.CustomPrefs"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:label="@string/settingsTitle">
         </activity>
          <activity
             android:name="uk.ac.brookes.bourgein.reversiand.PlayerSelectActivity"
-            android:screenOrientation="portrait">
+            android:screenOrientation="portrait"
+            android:label="@string/playersTitle">
         </activity>
        	<provider android:name="HighscoreProvider"    
             android:authorities="uk.ac.brookes.bourgein.highscores"></provider>

@@ -44,7 +44,6 @@ public class MainActivity extends BaseActivity {
 	private static final int QUIT_TO_HIGHSCORE = 4;
 	private static final int COMP_DELAY = 1500;
 	private static int gameBoard[];
-	//private int gameBoard1d[];
 	private ImageAdapter gridAdapter;
 	private ImageView imgViewOne;
 	private ImageView imgViewTwo;
@@ -69,7 +68,6 @@ public class MainActivity extends BaseActivity {
 	static Direction southEast = new Direction(1, 1);
 	static Direction southWest = new Direction(-1, 1);
 	static Direction northWest = new Direction(-1, -1);
-
 	static Player player1;
 	static Player player2;
 	static Player curPlayer;
@@ -229,6 +227,7 @@ public class MainActivity extends BaseActivity {
 	
 	@Override
 	public void onBackPressed(){
+		
 		showDialog(BACK_BUTTON_PRESS);
 	}
 	
@@ -372,11 +371,12 @@ public class MainActivity extends BaseActivity {
 			player1Text.setText(player1.getScoreAsString());
 			player2Text.setText(player2.getScoreAsString());
 			if (curPlayer == player1){
-				playerTwoNameTxt.setBackgroundColor(0);
+				playerTwoNameTxt.setBackgroundColor(getResources().getColor(R.color.playerTwoColor));
 				playerOneNameTxt.setBackgroundColor(getResources().getColor(R.color.background));
 			}
 			else{
-				playerOneNameTxt.setBackgroundColor(0);
+				playerOneNameTxt.setBackgroundColor(getResources().getColor(R.color.playerOneColor));
+				playerOneNameTxt.setTextColor(getResources().getColor(R.color.playerOneTextColor));
 				playerTwoNameTxt.setBackgroundColor(getResources().getColor(R.color.background));
 			}
 			if (isTimed){

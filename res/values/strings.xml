@@ -18,5 +18,10 @@
     <string name="prefsSoundTitle">Sound On:</string>
     <string name="prefsSecondsTitle">Seconds per turn:</string>
     <string name="save">Save</string>
+    <string name="home_title">Reversi</string>
+    <string name="playersTitle">Choose Players</string>
+    <string name="gameScreenTitle">Game</string>
+    <string name="settingsTitle">Settings</string>
+    <string name="highscoreTitle">Highscores</string>
 
 </resources>

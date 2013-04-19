@@ -1,32 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/RelativeLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" 
-    android:background="@drawable/gradients">
+    android:background="@color/background"
+    android:orientation="vertical" >
 
+      <ImageView
+        android:id="@+id/logo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:layout_above="@+id/btn_1player"
+        android:src="@drawable/reversi_logo" />
+      
     <Button
         android:id="@+id/btn_1player"
-        android:layout_width="match_parent"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:text="@string/onePlayerGame" />
+        android:layout_above="@+id/btn_2player"
+        android:layout_centerHorizontal="true"
+        android:background="@color/playerOneColor"
+        android:text="@string/onePlayerGame"
+        android:textColor="@color/playerOneTextColor"
+        android:textSize="24sp" />
 
     <Button
         android:id="@+id/btn_2player"
-        android:layout_width="match_parent"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:text="@string/twoPlayerGame" />
+        android:layout_alignLeft="@+id/btn_1player"
+        android:layout_centerVertical="true"
+        android:background="@color/playerTwoColor"
+        android:text="@string/twoPlayerGame"
+        android:textSize="24sp" />
+
+    
 
     <Button
         android:id="@+id/btn_settings"
-        android:layout_width="match_parent"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:text="@string/settings" />
-
+        android:layout_alignLeft="@+id/btn_2player"
+        android:layout_below="@+id/btn_2player"
+        android:layout_marginTop="14dp"
+        android:background="@color/playerOneColor"
+        android:text="@string/settings"
+        android:textColor="@color/playerOneTextColor"
+        android:textSize="24sp" />
+    
     <Button
         android:id="@+id/btn_highscore"
-        android:layout_width="match_parent"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:text="@string/highscores" />
+        android:layout_alignLeft="@+id/btn_settings"
+        android:layout_below="@+id/btn_settings"
+        android:background="@color/playerTwoColor"
+        android:text="@string/highscores"
+        android:textSize="24sp" />
 
-</LinearLayout>
+  
+
+</RelativeLayout>

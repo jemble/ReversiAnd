@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/background">
 
     <TextView
         android:id="@+id/tileSelectTitle"
@@ -11,7 +12,8 @@
         android:layout_alignParentLeft="true"
         android:layout_marginBottom="24dp"
         android:text="@string/prefsTileTitle"
-        android:textSize="24sp" />
+        android:textSize="24sp" 
+        android:textColor="@color/playerOneTextColor"/>
 
     <ImageButton
         android:id="@+id/redYellowImgBtn"
@@ -42,7 +44,8 @@
         android:layout_below="@+id/blackWhiteImgBtn"
         android:textSize="24sp"
         android:layout_marginTop="40dp"
-        android:text="@string/prefsTimedTitle" />
+        android:text="@string/prefsTimedTitle" 
+        android:textColor="@color/playerOneTextColor"/>
 
     <CheckBox
         android:id="@+id/timedCheck"
@@ -51,7 +54,8 @@
         android:layout_alignBaseline="@+id/timedTitle"
         android:layout_alignBottom="@+id/timedTitle"
         android:layout_alignRight="@+id/redYellowImgBtn"
-        android:text="" />
+        android:text="" 
+        android:textColor="@color/playerOneTextColor"/>
 
     <TextView
         android:id="@+id/soundTitle"
@@ -61,7 +65,8 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/timedCheck"
         android:layout_marginTop="40dp"
-        android:text="@string/prefsSoundTitle" />
+        android:text="@string/prefsSoundTitle" 
+        android:textColor="@color/playerOneTextColor"/>
     
     <CheckBox
         android:id="@+id/soundCheck"
@@ -70,7 +75,8 @@
         android:layout_alignBaseline="@+id/soundTitle"
         android:layout_alignBottom="@+id/soundTitle"
         android:layout_alignRight="@+id/redYellowImgBtn"
-        android:text="" />
+        android:text="" 
+        android:textColor="@color/playerOneTextColor"/>
     
     <TextView
         android:id="@+id/timeTitle"
@@ -80,7 +86,8 @@
         android:layout_alignParentLeft="true"
         android:layout_below="@+id/soundCheck"
         android:layout_marginTop="40dp"
-        android:text="@string/prefsSecondsTitle" />
+        android:text="@string/prefsSecondsTitle" 
+        android:textColor="@color/playerOneTextColor"/>
 
     <EditText
         android:id="@+id/secondsEditText"
@@ -90,16 +97,19 @@
         android:layout_alignBottom="@+id/timeTitle"
         android:layout_alignRight="@+id/redYellowImgBtn"
         android:ems="10"
-        android:inputType="number" >
+        android:inputType="number" 
+        android:textColor="@color/playerOneTextColor">
     </EditText>
 
     <Button
         android:id="@+id/prefsSaveBtn"
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="50dp"
-        android:text="@string/save" />
+        android:text="@string/save" 
+        android:textSize="24sp"
+        android:textColor="@color/playerOneTextColor"/>
 
 </RelativeLayout>

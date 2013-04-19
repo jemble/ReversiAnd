@@ -2,6 +2,7 @@ package uk.ac.brookes.bourgein.reversiand;
 
 import java.util.ArrayList;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
@@ -49,6 +50,7 @@ public class HighscoreAdapter extends BaseAdapter {
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View vi = convertView;
+		
 		if (convertView == null){
 			vi = inflater.inflate(R.layout.highscore_item, null);
 		}
@@ -58,7 +60,15 @@ public class HighscoreAdapter extends BaseAdapter {
 		if (uris.get(position)!=null){
 			imgPerson.setImageURI(Uri.parse(uris.get(position)));
 		}
-		
+		if ((position+1)%2 != 0){
+			
+			vi.setBackgroundColor(activity.getApplicationContext().getResources().getColor(R.color.playerOneColor));
+			txtName.setTextColor(activity.getApplicationContext().getResources().getColor(R.color.playerOneTextColor));
+			txtScore.setTextColor(activity.getApplicationContext().getResources().getColor(R.color.playerOneTextColor));
+		}
+		else{
+			
+		}
 		txtName.setText(names.get(position));
 		txtScore.setText(String.valueOf(scores.get(position)));
 		

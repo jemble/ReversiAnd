@@ -3,102 +3,130 @@
     android:id="@+id/RelativeLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical" 
+    android:background="@color/background"
+    android:padding="3dp">
 
     <TextView
         android:id="@+id/playerOneTitle"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
         android:layout_alignParentTop="true"
-        android:gravity="center_horizontal"
+        android:gravity="left"
         android:textSize="24sp"
-        android:text="@string/playerSelectPlayerOneTitle" />
+        android:background="@color/playerOneColor"
+        android:text="@string/playerSelectPlayerOneTitle" 
+        android:textColor="@color/playerOneTextColor"
+        android:padding="3dp"/>
 
-    <ImageView
-        android:id="@+id/playerOneImgVw"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:id="@+id/playerOneRel" 
+        android:background="@color/playerOneColor"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/playerOneTitle"
-        android:src="@drawable/stub" />
-
-    <TextView
-        android:id="@+id/playerOneName"
-        android:layout_width="wrap_content"
-        android:textSize="22sp"
-        android:layout_height="50dp"
-        android:gravity="center"
-        android:layout_alignBottom="@+id/playerOneImgVw"
-        android:layout_toRightOf="@+id/playerOneImgVw"/>
-
-    <Button
-        android:id="@+id/playerOneEditDialog"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/playerOneSelectContact"
-        android:layout_alignBottom="@+id/playerOneSelectContact"
-        android:layout_toLeftOf="@+id/playerOneSelectContact"
-        android:text="@string/playerEditText" />
+		android:layout_below="@+id/playerOneTitle"
+		android:padding="3dp">
+	    <ImageView
+	        android:id="@+id/playerOneImgVw"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@+id/playerOneTitle"
+	        android:src="@drawable/stub"  
+	        android:layout_marginRight="3dp"/>
+	
+	    <TextView
+	        android:id="@+id/playerOneName"
+	        android:layout_width="wrap_content"
+	        android:textSize="22sp"
+	        android:layout_height="50dp"
+	        android:gravity="center"
+	        android:layout_alignBottom="@+id/playerOneImgVw"
+	        android:layout_toRightOf="@+id/playerOneImgVw"
+	        android:textColor="@color/playerOneTextColor"
+	        />
+	    <Button
+	        android:id="@+id/playerOneEditDialog"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignBaseline="@+id/playerOneSelectContact"
+	        android:layout_alignBottom="@+id/playerOneSelectContact"
+	        android:layout_toLeftOf="@+id/playerOneSelectContact"
+	        android:text="@string/playerEditText" 
+	        android:textColor="@color/playerOneTextColor"/>
+	    
+	    <Button
+	        android:id="@+id/playerOneSelectContact"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentRight="true"
+	        android:layout_below="@+id/playerOneName"
+	        android:text="@string/playerSelectSelContact" 
+	        android:textColor="@color/playerOneTextColor"/>
+	</RelativeLayout>
     
-    <Button
-        android:id="@+id/playerOneSelectContact"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/playerOneName"
-        android:text="@string/playerSelectSelContact" />
     
     <TextView
         android:id="@+id/playerTwoTitle"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="24sp"
-        android:gravity="center_horizontal"
-        android:layout_marginTop="20dp"
-        android:layout_below="@+id/playerOneSelectContact"
-        android:text="@string/playerSelectPlayerTwoTitle" />
+        android:gravity="left"
+        android:layout_marginTop="20dp"   
+        android:background="@color/playerTwoColor"
+        android:layout_below="@+id/playerOneRel"
+        android:text="@string/playerSelectPlayerTwoTitle" 
+        android:padding="3dp"/>
     
-    <ImageView
-        android:id="@+id/playerTwoImgVw"
-        android:layout_width="wrap_content"
+    <RelativeLayout
+        android:id="@+id/playerTwoRel" 
+        android:background="@color/playerTwoColor"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/playerTwoTitle"
-        android:src="@drawable/stub" />
-
-    <TextView
-        android:id="@+id/playerTwoName"
-        android:layout_width="wrap_content"
-        android:textSize="22sp"
-        android:layout_height="50dp"
-        android:gravity="center"
-        android:layout_alignBottom="@+id/playerTwoImgVw"
-        android:layout_toRightOf="@+id/playerTwoImgVw"/>
-
-    <Button
-        android:id="@+id/playerTwoEditDialog"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/playerTwoSelectContact"
-        android:layout_alignBottom="@+id/playerTwoSelectContact"
-        android:layout_toLeftOf="@+id/playerTwoSelectContact"
-        android:text="@string/playerEditText" />
-    
-    <Button
-        android:id="@+id/playerTwoSelectContact"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/playerTwoName"
-        android:text="@string/playerSelectSelContact" />
-
+		android:layout_below="@+id/playerTwoTitle"
+		android:padding="3dp">
+		 <ImageView
+	        android:id="@+id/playerTwoImgVw"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_below="@+id/playerTwoTitle"
+	        android:src="@drawable/stub" 
+	        android:layout_marginRight="3dp"/>
+	
+	    <TextView
+	        android:id="@+id/playerTwoName"
+	        android:layout_width="wrap_content"
+	        android:textSize="22sp"
+	        android:layout_height="50dp"
+	        android:gravity="center"
+	        android:layout_alignBottom="@+id/playerTwoImgVw"
+	        android:layout_toRightOf="@+id/playerTwoImgVw"/>
+	
+	    <Button
+	        android:id="@+id/playerTwoEditDialog"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignBaseline="@+id/playerTwoSelectContact"
+	        android:layout_alignBottom="@+id/playerTwoSelectContact"
+	        android:layout_toLeftOf="@+id/playerTwoSelectContact"
+	        android:text="@string/playerEditText" />
+	    
+	    <Button
+	        android:id="@+id/playerTwoSelectContact"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:layout_alignParentRight="true"
+	        android:layout_below="@+id/playerTwoName"
+	        android:text="@string/playerSelectSelContact" />
+	</RelativeLayout>
     <Button
         android:id="@+id/playButton"
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/playerTwoSelectContact"
+        android:layout_below="@+id/playerTwoRel"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="31dp"
-        android:text="@string/playerSelectPlay" />
+        android:text="@string/playerSelectPlay" 
+        android:textColor="@color/playerOneTextColor"/>
 
     
 
