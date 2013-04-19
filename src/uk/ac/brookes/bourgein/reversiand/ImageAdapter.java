@@ -62,10 +62,10 @@ public class ImageAdapter extends BaseAdapter {
 		}
 		switch (board[position]){
 			case 1: 
-				imageView.setImageResource(whiteId);
+				imageView.setImageResource(blackId);
 				break;
 			case 2:
-				imageView.setImageResource(blackId);
+				imageView.setImageResource(whiteId);
 				break;
 			default:
 				imageView.setImageResource(R.drawable.blank);

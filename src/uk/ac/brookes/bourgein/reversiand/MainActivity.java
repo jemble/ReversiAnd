@@ -43,8 +43,8 @@ public class MainActivity extends BaseActivity {
 	private static final int QUIT_TO_SETTINGS = 3;
 	private static final int QUIT_TO_HIGHSCORE = 4;
 	private static final int COMP_DELAY = 1500;
-	private static int gameBoard[][];
-	private int gameBoard1d[];
+	private static int gameBoard[];
+	//private int gameBoard1d[];
 	private ImageAdapter gridAdapter;
 	private ImageView imgViewOne;
 	private ImageView imgViewTwo;
@@ -73,6 +73,7 @@ public class MainActivity extends BaseActivity {
 	static Player player1;
 	static Player player2;
 	static Player curPlayer;
+	private static Player winner;
 	ArrayList<Direction> dirsArList = new ArrayList<Direction>();
 	int moveCol, moveRow;
 	private CountDownTimer countTimer;
@@ -104,7 +105,6 @@ public class MainActivity extends BaseActivity {
 				}
 			});
 			
-			set1Darray();
 			gridAdapter.notifyDataSetChanged();
 		}
 		else{
@@ -196,7 +196,7 @@ public class MainActivity extends BaseActivity {
 			
 		case GAME_END:
 			Builder restartBuilder = new AlertDialog.Builder(this);
-			restartBuilder.setMessage("Start a new Game?");
+			restartBuilder.setMessage(winner.getPlayerName() + " wins! \nStart a new Game?");
 			restartBuilder.setCancelable(true);
 			restartBuilder.setPositiveButton("OK", new OnClickListener() {
 				
@@ -236,8 +236,8 @@ public class MainActivity extends BaseActivity {
 	 * setups the game
 	 */
 	public void setupGame(){
-		gameBoard = new int[8][8];
-		gameBoard1d = new int[64];
+		gameBoard = new int[64];
+		
 		dirsArList.add(east);
 		dirsArList.add(west);
 		dirsArList.add(north);
@@ -258,10 +258,10 @@ public class MainActivity extends BaseActivity {
 		
 		
 		curPlayer = player1;
-		gameBoard[4][3] = player1.getPlayerNum();
-		gameBoard[3][4] = player1.getPlayerNum();
-		gameBoard[3][3] = player2.getPlayerNum();
-		gameBoard[4][4] = player2.getPlayerNum();
+		gameBoard[4*8+3] = player1.getPlayerNum();
+		gameBoard[3*8+4] = player1.getPlayerNum();
+		gameBoard[3*8+3] = player2.getPlayerNum();
+		gameBoard[4*8+4] = player2.getPlayerNum();
 
 		Intent intent = getIntent();
 		cpu = intent.getBooleanExtra("Cpu",false);
@@ -271,11 +271,10 @@ public class MainActivity extends BaseActivity {
 			soundId = soundPool.load(this,R.raw.alarm, 1);
 		}
 		
-		gridAdapter = new ImageAdapter(this,gameBoard1d);
+		gridAdapter = new ImageAdapter(this,gameBoard);
 		gridV = (GridView) findViewById(R.id.gameGrid);
 		gridV.setAdapter(gridAdapter);
 		
-		set1Darray();
 		gridAdapter.notifyDataSetChanged();
 
 		player1.calcPlayableMoves(gameBoard, dirsArList);
@@ -330,14 +329,13 @@ public class MainActivity extends BaseActivity {
 
 		     public void onFinish() {
 		    	 countTimer.cancel();
-		    	 Toast countToast = Toast.makeText(getApplicationContext(), "Time's up!", Toast.LENGTH_LONG);
-		    	 countToast.show();
 		    	 if (curPlayer == player1){
-		    		 endGame(player2);
+		    		 winner = player2;
 		    	 }
 		    	 else {
-		    		 endGame(player1);
+		    		 winner = player1;
 		    	 }
+		    	 endGame(winner);
 		     }
 		  }.start();
 		}
@@ -362,32 +360,38 @@ public class MainActivity extends BaseActivity {
 	 * each player's valid and best moves, restart timer
 	 */
 	public void endMove(){
-		curPlayer = (curPlayer.getPlayerNum() == 1) ? player2 : player1;
-		player1.calcPlayableMoves(gameBoard, dirsArList);
-		player2.calcPlayableMoves(gameBoard, dirsArList);
-		player1.calcBestMove(gameBoard, dirsArList);
-		player2.calcBestMove(gameBoard, dirsArList);
-		set1Darray();
-		calcScore(player1);
-		calcScore(player2);
-		player1Text.setText(player1.getScoreAsString());
-		player2Text.setText(player2.getScoreAsString());
-		if (curPlayer == player1){
-			playerTwoNameTxt.setBackgroundColor(0);
-			playerOneNameTxt.setBackgroundColor(getResources().getColor(R.color.background));
+		if (player1.getCanGo() || player2.getCanGo()){
+			curPlayer = (curPlayer.getPlayerNum() == 1) ? player2 : player1;
+			player1.calcPlayableMoves(gameBoard, dirsArList);
+			player2.calcPlayableMoves(gameBoard, dirsArList);
+			player1.calcBestMove(gameBoard, dirsArList);
+			player2.calcBestMove(gameBoard, dirsArList);
+	
+			calcScore(player1);
+			calcScore(player2);
+			player1Text.setText(player1.getScoreAsString());
+			player2Text.setText(player2.getScoreAsString());
+			if (curPlayer == player1){
+				playerTwoNameTxt.setBackgroundColor(0);
+				playerOneNameTxt.setBackgroundColor(getResources().getColor(R.color.background));
+			}
+			else{
+				playerOneNameTxt.setBackgroundColor(0);
+				playerTwoNameTxt.setBackgroundColor(getResources().getColor(R.color.background));
+			}
+			if (isTimed){
+				timerText.setTextSize(24);
+				countTimer.start();
+			}
+			
+			if (curPlayer.getIsCpu()){
+				final Handler mHandler = new Handler();
+				mHandler.postDelayed(rMakeCompMove, COMP_DELAY);
+			}
 		}
-		else{
-			playerOneNameTxt.setBackgroundColor(0);
-			playerTwoNameTxt.setBackgroundColor(getResources().getColor(R.color.background));
-		}
-		if (isTimed){
-			timerText.setTextSize(24);
-			countTimer.start();
-		}
-		
-		if (curPlayer.getIsCpu()){
-			final Handler mHandler = new Handler();
-			mHandler.postDelayed(rMakeCompMove, COMP_DELAY);
+		else {		
+			winner = (player1.getScore()>player2.getScore()) ? player1 : player2;
+			endGame(winner);
 		}
 		
 	}
@@ -404,19 +408,6 @@ public class MainActivity extends BaseActivity {
 		
 	};
 	
-	
-	public int get2dInd(int i) {
-		return gameBoard[i / 8][i % 8];
-	}
-	
-	public void set1Darray(){
-		for (int i = 0; i < 8; i++) {
-			for (int j = 0; j < 8; j++) {
-				gameBoard1d[i * 8 + j] = gameBoard[i][j];
-			}
-		}
-	}
-	
 	/**
 	 * Called when the game is over
 	 * @param winner the winning player
@@ -425,8 +416,8 @@ public class MainActivity extends BaseActivity {
 		if (winner.getScore() > lowestScore && !winner.getIsCpu()){
 			updateHighscore(winner.getPlayerName(),winner.getPlayerUriString(),winner.getScore());
 		}
-		Toast endToast = Toast.makeText(getApplicationContext(), winner.getPlayerName()+" wins!", Toast.LENGTH_SHORT);
-		endToast.show();
+//		Toast endToast = Toast.makeText(getApplicationContext(), winner.getPlayerName()+" wins!", Toast.LENGTH_SHORT);
+//		endToast.show();
 		showDialog(GAME_END);
 		
 	}
@@ -439,7 +430,7 @@ public class MainActivity extends BaseActivity {
 		int score=0;
 		for (int i=0;i<8;i++){
 			for (int j=0;j<8;j++){
-				if(gameBoard[i][j]==player.getPlayerNum()){
+				if(gameBoard[i*8+j]==player.getPlayerNum()){
 					score++;
 				}
 			}
@@ -470,7 +461,7 @@ public class MainActivity extends BaseActivity {
 			if ((row + dirRow) < 8 && (row + dirRow) >= 0 && (col + dirCol) < 8
 					&& (col + dirCol) >= 0) {
 
-				if (gameBoard[row + dirRow][col + dirCol] == otherPlayer) { // check +1 in the direction we're using is the other player
+				if (gameBoard[(row + dirRow) *8 + (col + dirCol)] == otherPlayer) { // check +1 in the direction we're using is the other player
 					int move = 2;
 
 					// while we're still on the board. N.b we multiply by the
@@ -480,7 +471,7 @@ public class MainActivity extends BaseActivity {
 							&& (col + (move * dirCol)) < 8
 							&& (col + (move * dirCol)) >= 0) {
 						// if we end up on one of our own pieces
-						if (gameBoard[(row + (move * dirRow))][(col + (move * dirCol))] == player) {
+						if (gameBoard[(row + (move * dirRow))* 8 +(col + (move * dirCol))] == player) {
 							doFlip(direction, row, col, curPlayer);
 						}
 						move++;
@@ -501,12 +492,12 @@ public class MainActivity extends BaseActivity {
 		int playerNum = player.getPlayerNum();
 		int dirRow = dir.getRow();
 		int dirCol = dir.getCol();
-		gameBoard[row][col] = playerNum;
+		gameBoard[row*8+col] = playerNum;
 		
 		row += dirRow;
 		col += dirCol;
-		while (gameBoard[row][col] != playerNum) {
-			gameBoard[row][col] = playerNum;
+		while (gameBoard[row*8+col] != playerNum) {
+			gameBoard[row*8+col] = playerNum;
 			row += dirRow;
 			col += dirCol;
 		}
