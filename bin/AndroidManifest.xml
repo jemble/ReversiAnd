@@ -11,11 +11,11 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/reversi_icon"
         android:label="android.app.Application"
-        android:theme="@style/AppTheme" android:debuggable="true">
+        android:theme="@style/AppTheme">
         <activity 
-            android:name="activity_home"
+            android:name="uk.ac.brookes.bourgein.reversiand.HomeActivity"
             android:label="@string/home_title"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -24,7 +24,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="uk.ac.brookes.bourgein.reversiand.MainActivity"
+            android:name="uk.ac.brookes.bourgein.reversiand.GameActivity"
             android:screenOrientation="portrait"
             android:label="@string/gameScreenTitle">
         </activity>
@@ -33,12 +33,8 @@
             android:screenOrientation="portrait"
             android:label="@string/highscoreTitle">
         </activity>
-        <activity
-            android:name="uk.ac.brookes.bourgein.reversiand.PrefsActivity"
-            android:screenOrientation="portrait">
-        </activity>
          <activity
-            android:name="uk.ac.brookes.bourgein.reversiand.CustomPrefs"
+            android:name="uk.ac.brookes.bourgein.reversiand.CustomPrefsActivity"
             android:screenOrientation="portrait"
             android:label="@string/settingsTitle">
         </activity>

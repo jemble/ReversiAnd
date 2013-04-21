@@ -13,7 +13,11 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.text.TextUtils;
-
+/**
+ * Defines a content provider to provide access to the highscores table.
+ * @author bourgein
+ *
+ */
 public class HighscoreProvider extends ContentProvider {
 	public static final String AUTHORITY = "uk.ac.brookes.bourgein.highscores";
 	public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY + "/highscores");

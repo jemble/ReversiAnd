@@ -3,89 +3,49 @@ package uk.ac.brookes.bourgein.reversiand;
 import uk.ac.brookes.bourgein.reversiand.Direction;
 
 import java.util.ArrayList;
-
+/**
+ * All fields and methods relating to a player in the game.
+ * 
+ * @author bourgein
+ *
+ */
 public class Player {
+	/**Used to hold what squares are currently playable. 0 for unplayavble, 1 for playable*/
 	private int[] playableSquares;
-	private int playerNum;
-	private String playerName;
-	private String playerUriString;
-	private int score;
-	private int bestRow;
-	private int bestCol;
-	private boolean canGo;
-	private boolean isCpu;
+	/**Player's number. Either 1 or 2*/
+	public int playerNum;
+	/**Stores the player's display name*/
+	public String playerName;
+	/**Stores a URI to the player's picture as a String*/
+	public String playerUriString;
+	/**Stores the player's current score*/
+	public int score;
+	/**Stores the player's highest scoring row. Used with bestCol to determine best square*/
+	public int bestRow;
+	/**Stores the player's highest scoring column. Used with bestRow to determine best square*/
+	public int bestCol;
+	/**Stores if the player has a valid move*/
+	public boolean canGo;
+	/**Stores if the player is being controlled by the device*/
+	public boolean isCpu;
 	
 	public Player(int player){
 		playableSquares = new int[64];
 		this.playerNum = player;
 		score = 0;
 	}
-	
-	public int getPlayerNum(){
-		return playerNum;
-	}
-	
-	public void setScore(int score){
-		this.score = score;
-	}
-	
-	public int getScore(){
-		return score;
-	}
-	
+		
 	public String getScoreAsString(){
 		return Integer.toString(score);
 	}
 	
-	public void setPlayableSquare(int row,int col){
-		this.playableSquares[row*8+col]=1;
-	}
-	
-	public void setBestSquare(int row, int col){
-		this.bestRow = row;
-		this.bestCol = col; 
-	}
-	
-	public void setIsCpu(boolean isCpu){
-		this.isCpu = isCpu;
-	}
-	
-	public boolean getIsCpu(){
-		return this.isCpu;
-	}
-	
-	public boolean getCanGo(){
-		return this.canGo;
-	}
-	
-	public int getBestRow(){
-		return this.bestRow;
-	}
-	
-	public int getBestCol(){
-		return this.bestCol;
-	}
-	
-	public void setPlayerName(String name){
-		this.playerName = name;
-	}
-	
-	public String getPlayerName(){
-		return this.playerName;
-	}
-	
-	public void setPlayerUriString(String uri){
-		this.playerUriString = uri;
-	}
-	
-	public String getPlayerUriString(){
-		return this.playerUriString;
-	}
-	
-	public String getBestSquare(){
-		return "Player "+this.playerNum+" best square is row: "+this.bestRow + " col: "+this.bestCol;
-	}
-	
+	/**
+	 * Used to determine what squares are playable on the board.
+	 * Works in exactly the same was as GameActivity.flip() but increments a counter every time a valid
+	 * move is found. If no moves are found it sets canGo field to false, else canGo =  true.
+	 * @param currentGameBoard the current state of the game board
+	 * @param dirs the list of directions to move in
+	 */
 	public void calcPlayableMoves(int[] currentGameBoard, ArrayList<Direction> dirs){
 		resetMoves();
 		int moveCount=0;
@@ -134,6 +94,14 @@ public class Player {
 		}
 	}
 	
+	/**
+	 * Used to determine which square on the board is the highest scoring one.
+	 * Works in exactly the same way as GameActivity.flip() but every direction for every
+	 * playable square it stores the potential points and stores it in a temporary variable.
+	 * The highest scoring move is then stored in the bestSquare field.
+	 * @param currentGameBoard state of the current game board
+	 * @param dirs list of directions to move in
+	 */
 	public void calcBestMove(int[] currentGameBoard, ArrayList<Direction> dirs){
 		int otherPlayer = (this.playerNum == 1) ? 2 : 1;
 		int bestScore = 0;
@@ -168,12 +136,20 @@ public class Player {
 				}
 				if (tempScore>bestScore){
 					bestScore = tempScore;
-					this.setBestSquare(row, col);
+					this.bestCol = col;
+					this.bestRow = row;
 				}
 			}
 		}
 	}
 	
+	/**
+	 * Checks if the given square is a valid move or not. 
+	 * Looks in the playableSquares array and if a 1 is found returns true else false
+	 * @param row the row of the square to check
+	 * @param col the column of the square to check
+	 * @return true if valid move, else false
+	 */
 	public boolean isValidMove(int row, int col){
 		if(this.playableSquares[row*8+col] == 1){
 			return true;
@@ -183,15 +159,24 @@ public class Player {
 		}
 	}
 	
+	/**
+	 * Sets the given square as playable.
+	 * Updates the given squares index in the playableSquares array with a 1 
+	 * @param row the row of the square
+	 * @param col the column of the square
+	 */
 	private void setSquareAsPlayable(int row, int col){
-		playableSquares[row*8+col] = 1;
+		this.playableSquares[row*8+col] = 1;
 	}
 	
+	/**
+	 * Resets all playable squares to unplayable.
+	 * Loops through the playableSQuares array and sets each value to 0.
+	 * Called by calcPlayableMoves() to ensure only the current correct squares are set as playable
+	 */
 	private void resetMoves(){
-		for(int i=0;i<8;i++){
-			for (int j=0;j<8;j++){
-				this.playableSquares[i*8+j] = 0;
-			}
+		for(int i=0;i<64;i++){
+			this.playableSquares[i] = 0;
 		}
 	}
 }

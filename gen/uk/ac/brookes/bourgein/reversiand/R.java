@@ -28,10 +28,11 @@ public final class R {
         public static final int red=0x7f020007;
         public static final int red_yellow_select=0x7f020008;
         public static final int red_yellow_unselect=0x7f020009;
-        public static final int reversi_logo=0x7f02000a;
-        public static final int stub=0x7f02000b;
-        public static final int white=0x7f02000c;
-        public static final int yellow=0x7f02000d;
+        public static final int reversi_icon=0x7f02000a;
+        public static final int reversi_logo=0x7f02000b;
+        public static final int stub=0x7f02000c;
+        public static final int white=0x7f02000d;
+        public static final int yellow=0x7f02000e;
     }
     public static final class id {
         public static final int RelativeLayout1=0x7f0a0018;

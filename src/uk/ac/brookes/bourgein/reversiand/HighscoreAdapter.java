@@ -2,7 +2,6 @@ package uk.ac.brookes.bourgein.reversiand;
 
 import java.util.ArrayList;
 
-import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.net.Uri;
@@ -12,14 +11,23 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
+/**
+ * Custom adapter to show a row of the highscore table
+ * @author bourgein
+ *
+ */
 public class HighscoreAdapter extends BaseAdapter {
-
+	
+	/**Used to get the correct context. Typically the calling Activity*/
 	private Activity activity;
+	/**List of names in the highscore table*/
     private ArrayList<String> names;
+    /**List of scores in the highscore table*/
     private ArrayList<Integer> scores;
+    /**List of URIs as Strings in the highscore table*/
     private ArrayList<String> uris;
-    private static LayoutInflater inflater=null;
+    /**Used to inflate the row from highscore_item xml layout file*/
+    private static LayoutInflater inflater;
     
     public HighscoreAdapter(Activity a, ArrayList<String> n, ArrayList<Integer> s, ArrayList<String> u){
     	activity = a;
@@ -30,6 +38,9 @@ public class HighscoreAdapter extends BaseAdapter {
     	
     }
     
+    /**
+     * Returns number of items in highscore list
+     */
 	@Override
 	public int getCount() {
 		return names.size();
@@ -47,6 +58,14 @@ public class HighscoreAdapter extends BaseAdapter {
 		return position;
 	}
 
+	/**
+	 * Creates a View based on position in list.
+	 * If the position is odd the background will be black else the background will be white
+	 * @param position the position in the list
+	 * @param convertView the old view to reuse
+	 * @param parent the parent ViewGroup
+	 * @return the View created
+	 */
 	@Override
 	public View getView(int position, View convertView, ViewGroup parent) {
 		View vi = convertView;

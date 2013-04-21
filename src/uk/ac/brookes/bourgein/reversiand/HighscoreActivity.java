@@ -2,37 +2,42 @@ package uk.ac.brookes.bourgein.reversiand;
 
 import java.util.ArrayList;
 
-import android.app.Activity;
 import android.content.ContentResolver;
-import android.content.ContentValues;
 import android.database.Cursor;
 import android.os.Bundle;
-import android.view.MenuItem;
 import android.widget.ListView;
-import android.widget.Toast;
 
+/**
+ * Highscores Activity where users can view the current highscores table
+ * @author bourgein
+ *
+ */
 public class HighscoreActivity extends BaseActivity {
+	/**List of names to display*/
 	private ArrayList<String> names = new ArrayList<String>();
+	/**List of scores to display*/
 	private ArrayList<Integer> scores = new ArrayList<Integer>();
+	/**List of URIs as Strings used to display highscore entry picture*/
 	private ArrayList<String> uris = new ArrayList<String>();
+	/**Used to query the database*/
 	private ContentResolver cr;
-	private int numOfHighscores;
+	/**A custom adapter to display each row of the highscore ListView*/
 	private HighscoreAdapter scoresAdapter;
+	/**Used to display the rows of highscores*/
 	private ListView scoresList;
 	
+	/**
+	 * Called when the Activity is created.
+	 * Inflates the layout from highscore_layout.xml, queries the database and loops through the results displaying each 
+	 * entry as a row in the ListView using the custom HighscoreAdapter
+	 */
+	@Override
 	protected void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.highscore_layout);
 		
 		cr = getContentResolver();
 		Cursor c = cr.query(HighscoreProvider.CONTENT_URI, null, null, null, HighscoreProvider.KEY_SCORE+" DESC");
-		numOfHighscores = c.getCount();
-		if (numOfHighscores == 0){
-			populateFakeScores();
-			c = cr.query(HighscoreProvider.CONTENT_URI, null, null, null, null);
-			numOfHighscores = c.getCount();
-		}
-		
 		String name;
 		String picUri;
 		int score;
@@ -52,22 +57,6 @@ public class HighscoreActivity extends BaseActivity {
 		scoresList = (ListView)findViewById(R.id.hghscore_list);
 		scoresList.setAdapter(scoresAdapter);
 		
-	}
-	
-	public void populateFakeScores(){
-		String[] fakeNames = {"Jeremy","Mike","Tim","Phil","Sandra"};
-		String[] fakeUris = {"blah.blah.blah/blah","blah.blah.blah/blah","blah.blah.blah/blah","blah.blah.blah/blah","blah.blah.blah/blah"};
-		int[] fakeScores = {23,50,32,66,12};
-		
-		ContentResolver cr = getContentResolver();
-
-		ContentValues values = new ContentValues();
-		for (int i = 0; i < fakeNames.length; i++) {
-			values.put(HighscoreProvider.KEY_NAME, fakeNames[i]);
-			values.put(HighscoreProvider.KEY_PICURI, fakeUris[i]);
-			values.put(HighscoreProvider.KEY_SCORE,fakeScores[i]);
-			cr.insert(HighscoreProvider.CONTENT_URI, values);
-		}
 	}
 	
 }

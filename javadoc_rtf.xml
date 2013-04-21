@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project default="javadoc">
+    <target name="javadoc">
+        <javadoc access="private" classpath="libs/android-support-v4.jar" sourcefiles="src/uk/ac/brookes/bourgein/reversiand/Player.java,src/uk/ac/brookes/bourgein/reversiand/HighscoreActivity.java,src/uk/ac/brookes/bourgein/reversiand/ImageAdapter.java,src/uk/ac/brookes/bourgein/reversiand/BaseActivity.java,src/uk/ac/brookes/bourgein/reversiand/HighscoreProvider.java,src/uk/ac/brookes/bourgein/reversiand/Direction.java,src/uk/ac/brookes/bourgein/reversiand/HomeActivity.java,src/uk/ac/brookes/bourgein/reversiand/CustomPrefsActivity.java,src/uk/ac/brookes/bourgein/reversiand/GameActivity.java,src/uk/ac/brookes/bourgein/reversiand/HighscoreAdapter.java,src/uk/ac/brookes/bourgein/reversiand/PlayerSelectActivity.java" sourcepath="gen:src">
+            <doclet name="com.docflex.javadoc.Doclet" path="/Users/bourgein/Downloads/docflex-doclet-1.6.1/lib/docflex-doclet.jar"/>
+        </javadoc>
+    </target>
+</project>
